@@ -22,10 +22,11 @@ docker run --rm hack4goodsgf.com php -m
 
 ## Publishing
 
-Every push to `main` publishes native AMD64 and ARM64 images to GHCR and creates
+Conventional commits merged to `main` create semantic version tags and GitHub
+Releases. Each release publishes native AMD64 and ARM64 images to GHCR and creates
 multi-architecture tags:
 
-- `ghcr.io/sgfdevs/hack4goodsgf.com:sha-<commit-sha>`
+- `ghcr.io/sgfdevs/hack4goodsgf.com:<version>`
 - `ghcr.io/sgfdevs/hack4goodsgf.com:latest`
 
-The commit tag is immutable and intended for the future image-tag update workflow.
+The version tag is intended for the future image-tag update workflow.

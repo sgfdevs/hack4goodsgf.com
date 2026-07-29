@@ -1,13 +1,11 @@
 name: Build and Publish Docker Image
 
 on:
-  push:
-    branches:
-      - main
-
-concurrency:
-  group: docker-publish-${{ github.ref }}
-  cancel-in-progress: true
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -49,7 +47,7 @@ jobs:
           context: .
           push: true
           platforms: ${{ matrix.platform }}
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}-${{ matrix.platform_tag }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}-${{ matrix.platform_tag }}
           labels: |
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
@@ -78,7 +76,7 @@ jobs:
       - name: Create and push multi-architecture manifest
         run: |
           docker buildx imagetools create \
-            -t "${REGISTRY}/${IMAGE_NAME}:sha-${GITHUB_SHA}" \
+            -t "${REGISTRY}/${IMAGE_NAME}:${{ inputs.version }}" \
             -t "${REGISTRY}/${IMAGE_NAME}:latest" \
-            "${REGISTRY}/${IMAGE_NAME}:sha-${GITHUB_SHA}-linux-amd64" \
-            "${REGISTRY}/${IMAGE_NAME}:sha-${GITHUB_SHA}-linux-arm64"
+            "${REGISTRY}/${IMAGE_NAME}:${{ inputs.version }}-linux-amd64" \
+            "${REGISTRY}/${IMAGE_NAME}:${{ inputs.version }}-linux-arm64"
