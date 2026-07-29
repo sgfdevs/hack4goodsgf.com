@@ -5,6 +5,7 @@ Custom WordPress image for hack4goodsgf.com.
 The image extends the Docker Official WordPress Apache image with:
 
 - The PhpRedis extension required by the Redis Object Cache plugin.
+- An MU plugin that routes `wp_mail()` through environment-configured SMTP.
 - PHP upload and execution limits suitable for the initial backup-plugin restore.
 - A static `/healthz.html` endpoint for Kubernetes probes.
 

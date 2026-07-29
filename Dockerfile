@@ -10,3 +10,7 @@ RUN set -eux; \
 
 COPY wordpress.ini $PHP_INI_DIR/conf.d/wordpress.ini
 COPY healthz.html /usr/src/wordpress/healthz.html
+COPY mu-plugins/hack4good-smtp.php /usr/src/wordpress/wp-content/mu-plugins/hack4good-smtp.php
+COPY docker-entrypoint-hack4good.sh /usr/local/bin/
+
+ENTRYPOINT ["docker-entrypoint-hack4good.sh"]
