@@ -17,3 +17,4 @@ COPY mu-plugins/hack4good-smtp.php /usr/src/wordpress/wp-content/mu-plugins/hack
 COPY docker-entrypoint-hack4good.sh /usr/local/bin/
 
 ENTRYPOINT ["docker-entrypoint-hack4good.sh"]
+CMD ["apache2-foreground"]
