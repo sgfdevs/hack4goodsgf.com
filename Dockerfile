@@ -1,6 +1,6 @@
 FROM wordpress:cli-2.12.0-php8.5 AS wp-cli
 
-FROM wordpress:7.0.2-php8.5-apache
+FROM wordpress:7.1.0-php8.5-apache
 
 ARG PHPREDIS_VERSION=6.3.0
 
