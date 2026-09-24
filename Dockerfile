@@ -2,6 +2,8 @@ FROM wordpress:cli-2.12.0-php8.5 AS wp-cli
 
 FROM wordpress:7.1.0-php8.5-apache
 
+ENV APACHE_MAX_REQUEST_WORKERS=6
+
 ARG PHPREDIS_VERSION=6.3.0
 
 RUN set -eux; \
@@ -15,6 +17,13 @@ RUN set -eux; \
     sed -ri 's/<VirtualHost \*:80>/<VirtualHost *:8080>/' /etc/apache2/sites-available/000-default.conf; \
     grep -Fx 'Listen 8080' /etc/apache2/ports.conf; \
     grep -Fx '<VirtualHost *:8080>' /etc/apache2/sites-available/000-default.conf; \
+    sed -ri \
+      -e 's/^[[:space:]]*StartServers[[:space:]]+[0-9]+$/StartServers 2/' \
+      -e 's/^[[:space:]]*MinSpareServers[[:space:]]+[0-9]+$/MinSpareServers 2/' \
+      -e 's/^[[:space:]]*MaxSpareServers[[:space:]]+[0-9]+$/MaxSpareServers 2/' \
+      -e 's/^[[:space:]]*MaxRequestWorkers[[:space:]]+[0-9]+$/MaxRequestWorkers ${APACHE_MAX_REQUEST_WORKERS}/' \
+      /etc/apache2/mods-available/mpm_prefork.conf; \
+    grep -Fx 'MaxRequestWorkers ${APACHE_MAX_REQUEST_WORKERS}' /etc/apache2/mods-available/mpm_prefork.conf; \
     apache2ctl -t
 
 COPY wordpress.ini $PHP_INI_DIR/conf.d/wordpress.ini
