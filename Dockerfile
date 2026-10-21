@@ -1,6 +1,6 @@
 FROM wordpress:cli-2.12.0-php8.5 AS wp-cli
 
-FROM wordpress:7.1.0-php8.5-apache
+FROM wordpress:7.1.3-php8.5-apache
 
 ENV APACHE_MAX_REQUEST_WORKERS=6
 
